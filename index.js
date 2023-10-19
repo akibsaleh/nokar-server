@@ -18,9 +18,10 @@ const client = new MongoClient(uri);
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
     const productsCollection = client.db('nokar-shop').collection('products');
     const brandsCollection = client.db('nokar-shop').collection('brands');
+    const firebaseCollection = client.db('nokar-shop').collection('firebase_auth');
 
     app.get('/products', async (req, res) => {
       const products = await productsCollection.find().toArray();
@@ -32,9 +33,13 @@ async function run() {
       res.send(brands);
     });
 
+    app.get('/firebase', async (req, res) => {
+      const firebaseAuth = await firebaseCollection.find().toArray();
+      res.send(firebaseAuth);
+    });
+
     app.post('/products', async (req, res) => {
       const newProduct = req.body;
-      console.log(newProduct);
       const result = await productsCollection.insertOne(newProduct);
       res.send(result);
     });
