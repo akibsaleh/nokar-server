@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
 const app = express();
@@ -33,7 +33,7 @@ async function run() {
       res.send(brands);
     });
 
-    app.get('/brands/name', async (req, res) => {
+    app.get('/brands-name', async (req, res) => {
       const query = {};
       const options = {
         projection: { _id: 1, name: 1 },
@@ -58,7 +58,14 @@ async function run() {
       res.send(products);
     });
 
-    app.get('/brands/thumb', async (req, res) => {
+    app.get('/product/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const product = await productsCollection.findOne(query);
+      res.send(product);
+    });
+
+    app.get('/brands-thumb', async (req, res) => {
       const query = {};
       const options = {
         projection: { _id: 1, name: 1, thumb: 1 },
