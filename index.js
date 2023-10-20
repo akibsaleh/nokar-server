@@ -39,8 +39,16 @@ async function run() {
         projection: { _id: 1, name: 1 },
       };
       const brandNames = await brandsCollection.find(query, options).toArray();
-      console.log(brandNames);
       res.send(brandNames);
+    });
+
+    app.get('/brands/thumb', async (req, res) => {
+      const query = {};
+      const options = {
+        projection: { _id: 1, name: 1, thumb: 1 },
+      };
+      const brandThumbs = await brandsCollection.find(query, options).toArray();
+      res.send(brandThumbs);
     });
 
     app.get('/firebase', async (req, res) => {
