@@ -71,7 +71,7 @@ async function run() {
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
       const updatedProduct = req.body;
-      const Product = {
+      const product = {
         $set: {
           brand: updatedProduct.brand,
           description: updatedProduct.description,
