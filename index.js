@@ -22,6 +22,7 @@ async function run() {
     const productsCollection = client.db('nokar-shop').collection('products');
     const brandsCollection = client.db('nokar-shop').collection('brands');
     const firebaseCollection = client.db('nokar-shop').collection('firebase_auth');
+    const cartCollection = client.db('nokar-shop').collection('cart');
 
     app.get('/products', async (req, res) => {
       const products = await productsCollection.find().toArray();
@@ -79,6 +80,20 @@ async function run() {
       res.send(firebaseAuth);
     });
 
+    app.get('/cart/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const cursor = await cartCollection.find().toArray();
+      res.send(cursor);
+    });
+
+    app.delete('/cart/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartCollection.deleteOne(query);
+      res.send(result);
+    });
+
     app.post('/products', async (req, res) => {
       const newProduct = req.body;
       const result = await productsCollection.insertOne(newProduct);
@@ -88,6 +103,12 @@ async function run() {
     app.post('/brands', async (req, res) => {
       const newBrand = req.body;
       const result = await brandsCollection.insertOne(newBrand);
+      res.send(result);
+    });
+
+    app.post('/cart', async (req, res) => {
+      const id = req.body;
+      const result = await cartCollection.insertOne(id);
       res.send(result);
     });
 
